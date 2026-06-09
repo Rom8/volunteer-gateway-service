@@ -16,7 +16,12 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(LOGIN_PAGE, "/css/**", "/images/**", "/favicon.ico").permitAll()
+                        .requestMatchers(
+                                LOGIN_PAGE,
+                                "/css/**",
+                                "/fonts/**",
+                                "/images/**",
+                                "/favicon.ico").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2.loginPage(LOGIN_PAGE))
                 .build();
