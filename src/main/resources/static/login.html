@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск пропавших людей</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<main class="login-page" aria-labelledby="login-title">
+    <section class="login-card">
+        <div class="login-card__header">
+            <p class="login-card__eyebrow">Поиск пропавших людей</p>
+            <h1 id="login-title" class="login-card__title">Войдите в систему, как волонтёр</h1>
+            <p class="login-card__description">
+                Используйте внешний аккаунт, чтобы безопасно продолжить работу с сервисом.
+            </p>
+        </div>
+
+        <div class="auth-methods" aria-label="Доступные способы входа">
+            <!--
+                Чтобы добавить новый способ входа:
+                1. Добавьте provider в spring.security.oauth2.client.registration в application.yml.
+                2. Скопируйте ссылку ниже и замените registrationId в href:
+                   /oauth2/authorization/{registrationId}
+            -->
+            <a class="auth-method auth-method--yandex" href="/oauth2/authorization/yandex">
+                <span class="auth-method__icon" aria-hidden="true">Я</span>
+                <span class="auth-method__content">
+                    <span class="auth-method__title">Войти через Yandex</span>
+                    <span class="auth-method__hint">OAuth 2.0</span>
+                </span>
+            </a>
+        </div>
+    </section>
+</main>
+</body>
+</html>
