@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfiguration {
 
     private static final String LOGIN_PAGE = "/login.html";
+    private static final String LOGOUT_SUCCESS_URL = LOGIN_PAGE + "?logout";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
@@ -24,6 +25,9 @@ public class WebSecurityConfiguration {
                                 "/favicon.ico").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2.loginPage(LOGIN_PAGE))
+                .logout(logout -> logout
+                        .logoutSuccessUrl(LOGOUT_SUCCESS_URL)
+                        .permitAll())
                 .build();
     }
 }
