@@ -1,4 +1,4 @@
-package ru.rom8.rescue.volunteer_gateway_service.security;
+package ru.rom8.rescue.gateway.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

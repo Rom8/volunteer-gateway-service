@@ -1,4 +1,4 @@
-package ru.rom8.rescue.volunteer_gateway_service;
+package ru.rom8.rescue.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
