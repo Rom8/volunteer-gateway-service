@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Данные волонтёра</title>
+    <link rel="stylesheet" th:href="@{/css/volunteer-registration.css}">
+</head>
+<body>
+<header class="volunteer-header">
+    <form class="logout-form" th:action="@{/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <button class="logout-button" type="submit">Выйти</button>
+    </form>
+</header>
+
+<main class="volunteer-registration-page" aria-labelledby="volunteer-details-title">
+    <section class="volunteer-panel">
+        <p class="volunteer-panel__eyebrow">Профиль волонтёра</p>
+        <h1 id="volunteer-details-title" class="volunteer-panel__title">Данные волонтёра сохранены</h1>
+        <p class="volunteer-panel__description">
+            Проверьте информацию, которая будет использоваться в личном кабинете.
+        </p>
+
+        <dl class="volunteer-details">
+            <div class="volunteer-details__row">
+                <dt>ФИО</dt>
+                <dd th:text="${volunteer.fullName}">Иванов Иван Иванович</dd>
+            </div>
+            <div class="volunteer-details__row">
+                <dt>Пол</dt>
+                <dd th:text="${volunteer.gender.name() == 'MALE' ? 'Мужской' : 'Женский'}">Мужской</dd>
+            </div>
+            <div class="volunteer-details__row">
+                <dt>Телефон</dt>
+                <dd th:text="${volunteer.phoneNumber}">+7 999 123-45-67</dd>
+            </div>
+            <div class="volunteer-details__row">
+                <dt>Email</dt>
+                <dd th:text="${volunteer.email}">volunteer@example.com</dd>
+            </div>
+            <div class="volunteer-details__row">
+                <dt>Дата рождения</dt>
+                <dd th:text="${volunteer.birthDate}">1990-01-01</dd>
+            </div>
+            <div class="volunteer-details__row">
+                <dt>Населённый пункт</dt>
+                <dd th:text="${volunteer.residenceSettlement}">Москва</dd>
+            </div>
+            <div class="volunteer-details__row">
+                <dt>Район</dt>
+                <dd th:text="${#strings.isEmpty(volunteer.residenceDistrict) ? 'Не указан' : volunteer.residenceDistrict}">
+                    Не указан
+                </dd>
+            </div>
+        </dl>
+
+        <a class="primary-button primary-button--link" th:href="@{/}">Перейти в личный кабинет</a>
+    </section>
+</main>
+</body>
+</html>

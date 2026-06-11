@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личные данные волонтёра</title>
+    <link rel="stylesheet" th:href="@{/css/volunteer-registration.css}">
+</head>
+<body>
+<header class="volunteer-header">
+    <form class="logout-form" th:action="@{/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <button class="logout-button" type="submit">Выйти</button>
+    </form>
+</header>
+
+<main class="volunteer-registration-page" aria-labelledby="volunteer-form-title">
+    <section class="volunteer-panel volunteer-panel--wide">
+        <p class="volunteer-panel__eyebrow">Регистрация волонтёра</p>
+        <h1 id="volunteer-form-title" class="volunteer-panel__title">Заполните личные данные волонтёра</h1>
+        <p class="volunteer-panel__description">
+            Эти данные будут связаны с вашим аккаунтом и помогут координаторам быстрее связаться с вами.
+        </p>
+
+        <form class="volunteer-form" th:action="@{/volunteers}" th:object="${volunteerForm}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <div class="form-alert" th:if="${#fields.hasAnyErrors()}">
+                Проверьте заполнение обязательных полей.
+            </div>
+
+            <label class="form-field" for="fullName">
+                <span class="form-field__label">ФИО</span>
+                <input id="fullName" class="form-field__control" type="text" th:field="*{fullName}"
+                       autocomplete="name" placeholder="Иванов Иван Иванович" required>
+                <span class="form-field__error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+            </label>
+
+            <label class="form-field" for="gender">
+                <span class="form-field__label">Пол</span>
+                <select id="gender" class="form-field__control" th:field="*{gender}" required>
+                    <option value="">Выберите пол</option>
+                    <option th:each="gender : ${genders}"
+                            th:value="${gender}"
+                            th:text="${gender.name() == 'MALE' ? 'Мужской' : 'Женский'}">
+                        Мужской
+                    </option>
+                </select>
+                <span class="form-field__error" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></span>
+            </label>
+
+            <label class="form-field" for="phoneNumber">
+                <span class="form-field__label">Телефон</span>
+                <input id="phoneNumber" class="form-field__control" type="tel" th:field="*{phoneNumber}"
+                       autocomplete="tel" placeholder="+7 999 123-45-67" required>
+                <span class="form-field__error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+            </label>
+
+            <label class="form-field" for="email">
+                <span class="form-field__label">Email</span>
+                <input id="email" class="form-field__control form-field__control--readonly" type="email"
+                       th:value="*{email}" disabled>
+                <span class="form-field__hint">Email получен из OAuth2-профиля и недоступен для редактирования.</span>
+            </label>
+
+            <label class="form-field" for="birthDate">
+                <span class="form-field__label">Дата рождения</span>
+                <input id="birthDate" class="form-field__control" type="date" th:field="*{birthDate}" required>
+                <span class="form-field__error" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
+            </label>
+
+            <label class="form-field" for="residenceSettlement">
+                <span class="form-field__label">Населённый пункт проживания</span>
+                <input id="residenceSettlement" class="form-field__control" type="text" th:field="*{residenceSettlement}"
+                       autocomplete="address-level2" placeholder="Москва" required>
+                <span class="form-field__error" th:if="${#fields.hasErrors('residenceSettlement')}" th:errors="*{residenceSettlement}"></span>
+            </label>
+
+            <label class="form-field" for="residenceDistrict">
+                <span class="form-field__label">Район проживания</span>
+                <input id="residenceDistrict" class="form-field__control" type="text" th:field="*{residenceDistrict}"
+                       autocomplete="address-level3" placeholder="Центральный">
+            </label>
+
+            <button class="primary-button" type="submit">Сохранить данные</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>
