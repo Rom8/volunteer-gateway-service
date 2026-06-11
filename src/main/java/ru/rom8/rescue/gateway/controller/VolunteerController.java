@@ -13,6 +13,7 @@ import ru.rom8.rescue.gateway.dto.VolunteerForm;
 import ru.rom8.rescue.gateway.entity.VolunteerGender;
 import ru.rom8.rescue.gateway.mapper.VolunteerMapper;
 import ru.rom8.rescue.gateway.service.VolunteerService;
+import ru.rom8.rescue.gateway.validate.VolunteerFormValidator;
 
 @Controller
 @RequestMapping("/")
@@ -30,21 +31,16 @@ public class VolunteerController {
     private static final String MODEL_VOLUNTEER_FORM = "volunteerForm";
     private static final String MODEL_VOLUNTEER_NAME = "volunteerName";
     private static final String MODEL_GENDERS = "genders";
-    private static final String FIELD_FULL_NAME = "fullName";
-    private static final String FIELD_GENDER = "gender";
-    private static final String FIELD_PHONE_NUMBER = "phoneNumber";
-    private static final String FIELD_BIRTH_DATE = "birthDate";
-    private static final String FIELD_RESIDENCE_SETTLEMENT = "residenceSettlement";
-    private static final String VALIDATION_CODE_REQUIRED = "required";
-    private static final String REQUIRED_FIELD_MESSAGE = "Заполните обязательное поле";
     private static final String MISSING_EMAIL_MESSAGE = "OAuth2 user email is missing";
 
     private final VolunteerService volunteerService;
     private final VolunteerMapper volunteerMapper;
+    private final VolunteerFormValidator volunteerFormValidator;
 
-    public VolunteerController(VolunteerService volunteerService, VolunteerMapper volunteerMapper) {
+    public VolunteerController(VolunteerService volunteerService, VolunteerMapper volunteerMapper, VolunteerFormValidator volunteerFormValidator) {
         this.volunteerService = volunteerService;
         this.volunteerMapper = volunteerMapper;
+        this.volunteerFormValidator = volunteerFormValidator;
     }
 
     @GetMapping(ROOT_PATH)
@@ -81,7 +77,7 @@ public class VolunteerController {
         }
 
         form.setEmail(email);
-        validateVolunteerForm(form, bindingResult);
+        volunteerFormValidator.validateVolunteerForm(form, bindingResult);
         if (bindingResult.hasErrors()) {
             addVolunteerFormAttributes(model);
             return TEMPLATE_VOLUNTEER_FORM;
@@ -107,28 +103,8 @@ public class VolunteerController {
         model.addAttribute(MODEL_GENDERS, VolunteerGender.values());
     }
 
-    private void validateVolunteerForm(VolunteerForm form, BindingResult bindingResult) {
-        rejectIfBlank(bindingResult, FIELD_FULL_NAME, form.getFullName());
-        rejectIfBlank(bindingResult, FIELD_PHONE_NUMBER, form.getPhoneNumber());
-        rejectIfBlank(bindingResult, FIELD_RESIDENCE_SETTLEMENT, form.getResidenceSettlement());
-        rejectIfMissing(bindingResult, FIELD_GENDER, form.getGender());
-        rejectIfMissing(bindingResult, FIELD_BIRTH_DATE, form.getBirthDate());
-    }
-
-    private void rejectIfBlank(BindingResult bindingResult, String fieldName, String value) {
-        if ((value == null || value.isBlank()) && !bindingResult.hasFieldErrors(fieldName)) {
-            bindingResult.rejectValue(fieldName, VALIDATION_CODE_REQUIRED, REQUIRED_FIELD_MESSAGE);
-        }
-    }
-
-    private void rejectIfMissing(BindingResult bindingResult, String fieldName, Object value) {
-        if (value == null && !bindingResult.hasFieldErrors(fieldName)) {
-            bindingResult.rejectValue(fieldName, VALIDATION_CODE_REQUIRED, REQUIRED_FIELD_MESSAGE);
-        }
-    }
-
     private String getAuthenticatedEmail(OAuth2User oauth2User) {
-        if (oauth2User == null || oauth2User.getName() == null || oauth2User.getName().isBlank()) {
+        if (oauth2User == null || oauth2User.getName().isBlank()) {
             throw new IllegalStateException(MISSING_EMAIL_MESSAGE);
         }
         return oauth2User.getName().trim();
