@@ -18,6 +18,8 @@ public interface VolunteerMapper {
     @Mapping(target = "residenceDistrict", source = "residenceDistrict", qualifiedByName = "trimToNull")
     Volunteer toVolunteer(VolunteerForm form);
 
+    VolunteerForm toVolunteerForm(Volunteer volunteer);
+
     @Named("trim")
     default String trim(String value) {
         return value == null ? null : value.trim();

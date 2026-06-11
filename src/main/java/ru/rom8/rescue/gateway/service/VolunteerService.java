@@ -1,20 +1,15 @@
 package ru.rom8.rescue.gateway.service;
 
-import java.util.Objects;
-import java.util.Optional;
-
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.rom8.rescue.gateway.entity.Volunteer;
 import ru.rom8.rescue.gateway.repository.VolunteerRepository;
 
+import java.util.Objects;
+import java.util.Optional;
+
 @Service
 public class VolunteerService {
-
-    private static final String DEFAULT_VOLUNTEER_NAME = "волонтёр";
-    private static final String FIRST_NAME_ATTRIBUTE = "first_name";
-    private static final String LAST_NAME_ATTRIBUTE = "last_name";
 
     private final VolunteerRepository volunteerRepository;
 
@@ -62,19 +57,5 @@ public class VolunteerService {
     @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
         return email != null && !email.isBlank() && volunteerRepository.existsByEmailIgnoreCase(email.trim());
-    }
-
-    public String getVolunteerName(OAuth2User oauth2User) {
-        if (oauth2User == null) {
-            return DEFAULT_VOLUNTEER_NAME;
-        }
-
-        String firstName = oauth2User.getAttribute(FIRST_NAME_ATTRIBUTE);
-        String lastName = oauth2User.getAttribute(LAST_NAME_ATTRIBUTE);
-        String fullName = String.format("%s %s",
-                firstName == null ? "" : firstName,
-                lastName == null ? "" : lastName).trim();
-
-        return fullName.isBlank() ? DEFAULT_VOLUNTEER_NAME : fullName;
     }
 }
