@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="001-create-volunteer-table" author="veai">
+        <createTable tableName="volunteer" remarks="Данные волонтёров спасательного проекта">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="Уникальный идентификатор волонтёра">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_volunteer"/>
+            </column>
+            <column name="full_name" type="VARCHAR(255)" remarks="Фамилия, имя и отчество волонтёра">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="VARCHAR(32)" remarks="Пол волонтёра">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="VARCHAR(32)" remarks="Контактный номер телефона волонтёра">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(320)" remarks="Email волонтёра для связи и сопоставления с OAuth2-пользователем">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birth_date" type="DATE" remarks="Дата рождения волонтёра">
+                <constraints nullable="false"/>
+            </column>
+            <column name="residence_settlement" type="VARCHAR(255)" remarks="Название населённого пункта проживания волонтёра">
+                <constraints nullable="false"/>
+            </column>
+            <column name="residence_district" type="VARCHAR(255)" remarks="Район населённого пункта проживания волонтёра"/>
+        </createTable>
+
+        <createIndex indexName="idx_volunteer_email" tableName="volunteer" unique="true">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
