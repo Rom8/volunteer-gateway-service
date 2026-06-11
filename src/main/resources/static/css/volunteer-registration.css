@@ -202,6 +202,37 @@ body {
     text-decoration: none;
 }
 
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    width: min(100%, 520px);
+    margin: 8px auto 0;
+}
+
+.form-actions .primary-button {
+    display: inline-flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.volunteer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 30px;
+}
+
+.volunteer-actions .primary-button--link {
+    margin: 0;
+}
+
 .volunteer-details {
     display: grid;
     gap: 14px;
@@ -240,5 +271,14 @@ body {
     .volunteer-form,
     .volunteer-details__row {
         grid-template-columns: 1fr;
+    }
+
+    .volunteer-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .volunteer-actions .primary-button--link {
+        width: 100%;
     }
 }

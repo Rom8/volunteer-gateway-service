@@ -39,7 +39,8 @@ body {
     margin: 0;
 }
 
-.logout-button {
+.logout-button,
+.primary-button {
     min-width: 112px;
     border: 0;
     border-radius: var(--border-radius-button);
@@ -54,15 +55,27 @@ body {
 }
 
 .logout-button:hover,
-.logout-button:focus-visible {
+.logout-button:focus-visible,
+.primary-button:hover,
+.primary-button:focus-visible {
     background: var(--accent-hover);
     transform: translateY(-1px);
     box-shadow: 0 16px 32px rgba(255, 122, 26, 0.42);
 }
 
-.logout-button:focus-visible {
+.logout-button:focus-visible,
+.primary-button:focus-visible {
     outline: 3px solid rgba(255, 255, 255, 0.82);
     outline-offset: 3px;
+}
+
+.primary-button--link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 240px;
+    margin: 30px auto 0;
+    text-decoration: none;
 }
 
 .volunteer-page {

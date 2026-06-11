@@ -16,13 +16,21 @@
 
 <main class="volunteer-registration-page" aria-labelledby="volunteer-form-title">
     <section class="volunteer-panel volunteer-panel--wide">
-        <p class="volunteer-panel__eyebrow">Регистрация волонтёра</p>
-        <h1 id="volunteer-form-title" class="volunteer-panel__title">Заполните личные данные волонтёра</h1>
-        <p class="volunteer-panel__description">
+        <p class="volunteer-panel__eyebrow"
+           th:text="${volunteerUpdateMode} ? 'Редактирование профиля' : 'Регистрация волонтёра'">
+            Регистрация волонтёра
+        </p>
+        <h1 id="volunteer-form-title" class="volunteer-panel__title"
+            th:text="${volunteerUpdateMode} ? 'Обновите личные данные волонтёра' : 'Заполните личные данные волонтёра'">
+            Заполните личные данные волонтёра
+        </h1>
+        <p class="volunteer-panel__description"
+           th:text="${volunteerUpdateMode} ? 'Измените данные, которые будут использоваться в личном кабинете.' : 'Эти данные будут связаны с вашим аккаунтом и помогут координаторам быстрее связаться с вами.'">
             Эти данные будут связаны с вашим аккаунтом и помогут координаторам быстрее связаться с вами.
         </p>
 
-        <form class="volunteer-form" th:action="@{/volunteers}" th:object="${volunteerForm}" method="post">
+        <form class="volunteer-form" th:action="${volunteerUpdateMode} ? @{/volunteers/update} : @{/volunteers}"
+              th:object="${volunteerForm}" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
             <div class="form-alert" th:if="${#fields.hasAnyErrors()}">
@@ -82,7 +90,15 @@
                        autocomplete="address-level3" placeholder="Центральный">
             </label>
 
-            <button class="primary-button" type="submit">Сохранить данные</button>
+            <div class="form-actions">
+                <a class="primary-button primary-button--link" th:href="${volunteerUpdateMode} ? @{/volunteers/me} : @{/}">
+                    Назад
+                </a>
+                <button class="primary-button" type="submit"
+                        th:text="${volunteerUpdateMode} ? 'Обновить данные' : 'Сохранить данные'">
+                    Сохранить данные
+                </button>
+            </div>
         </form>
     </section>
 </main>

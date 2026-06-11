@@ -17,9 +17,9 @@
 <main class="volunteer-registration-page" aria-labelledby="volunteer-details-title">
     <section class="volunteer-panel">
         <p class="volunteer-panel__eyebrow">Профиль волонтёра</p>
-        <h1 id="volunteer-details-title" class="volunteer-panel__title">Данные волонтёра сохранены</h1>
+        <h1 id="volunteer-details-title" class="volunteer-panel__title">Данные волонтёра</h1>
         <p class="volunteer-panel__description">
-            Проверьте информацию, которая будет использоваться в личном кабинете.
+            Личная информация волонтёра
         </p>
 
         <dl class="volunteer-details">
@@ -55,7 +55,10 @@
             </div>
         </dl>
 
-        <a class="primary-button primary-button--link" th:href="@{/}">Перейти в личный кабинет</a>
+        <div class="volunteer-actions">
+            <a class="primary-button primary-button--link" th:href="@{/volunteers/update}">Редактировать данные</a>
+            <a class="primary-button primary-button--link" th:href="@{/}">Перейти в личный кабинет</a>
+        </div>
     </section>
 </main>
 </body>
