@@ -1,5 +1,7 @@
 package ru.rom8.rescue.gateway.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 import lombok.Getter;
@@ -11,15 +13,20 @@ import ru.rom8.rescue.gateway.entity.VolunteerGender;
 @Getter
 public class VolunteerForm {
 
-    private String fullName;
+    @NotBlank
     private String familyName;
+    @NotBlank
     private String firstName;
     private String patronymic;
+    @NotNull
     private VolunteerGender gender;
+    @NotBlank(message = "{required.volunteerForm.phoneNumber}")
     private String phoneNumber;
     private String email;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull
     private LocalDate birthDate;
+    @NotBlank(message = "{required.volunteerForm.residenceSettlement}")
     private String residenceSettlement;
     private String residenceDistrict;
 

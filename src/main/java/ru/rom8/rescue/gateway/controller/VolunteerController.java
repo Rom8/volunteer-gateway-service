@@ -1,10 +1,12 @@
 package ru.rom8.rescue.gateway.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +16,12 @@ import ru.rom8.rescue.gateway.entity.Volunteer;
 import ru.rom8.rescue.gateway.entity.VolunteerGender;
 import ru.rom8.rescue.gateway.mapper.VolunteerMapper;
 import ru.rom8.rescue.gateway.service.VolunteerService;
-import ru.rom8.rescue.gateway.validate.VolunteerFormValidator;
 
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class VolunteerController {
 
     private static final String ROOT_PATH = "/";
@@ -38,15 +40,6 @@ public class VolunteerController {
 
     private final VolunteerService volunteerService;
     private final VolunteerMapper volunteerMapper;
-    private final VolunteerFormValidator volunteerFormValidator;
-
-    public VolunteerController(VolunteerService volunteerService,
-                               VolunteerMapper volunteerMapper,
-                               VolunteerFormValidator volunteerFormValidator) {
-        this.volunteerService = volunteerService;
-        this.volunteerMapper = volunteerMapper;
-        this.volunteerFormValidator = volunteerFormValidator;
-    }
 
     @GetMapping(ROOT_PATH)
     public String volunteerHome(@AuthenticationPrincipal OAuth2User oauth2User, Model model) {
@@ -74,17 +67,16 @@ public class VolunteerController {
 
     @PostMapping(UPDATE_VOLUNTEER_PATH)
     public String updateVolunteer(@AuthenticationPrincipal OAuth2User oauth2User,
-                                  @ModelAttribute(MODEL_VOLUNTEER_FORM) VolunteerForm form,
+                                  @Validated @ModelAttribute(MODEL_VOLUNTEER_FORM) VolunteerForm form,
                                   BindingResult bindingResult,
                                   Model model) {
-        String email = getAuthenticatedEmail(oauth2User);
-        Optional<Volunteer> volunteerOpt = volunteerService.getVolunteerByEmail(email);
+        final String email = getAuthenticatedEmail(oauth2User);
         form.setEmail(email);
-        volunteerFormValidator.validateVolunteerForm(form, bindingResult);
         if (bindingResult.hasErrors()) {
             return showVolunteerForm(model, form, true);
         }
 
+        Optional<Volunteer> volunteerOpt = volunteerService.getVolunteerByEmail(email);
         if (volunteerOpt.isEmpty()) {
             volunteerService.addVolunteer(volunteerMapper.toVolunteer(form));
         } else {
