@@ -11,7 +11,9 @@ import ru.rom8.rescue.gateway.entity.Volunteer;
 public interface VolunteerMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "fullName", source = "fullName", qualifiedByName = "trim")
+    @Mapping(target = "familyName", source = "familyName", qualifiedByName = "trim")
+    @Mapping(target = "firstName", source = "firstName", qualifiedByName = "trim")
+    @Mapping(target = "patronymic", source = "patronymic", qualifiedByName = "trim")
     @Mapping(target = "phoneNumber", source = "phoneNumber", qualifiedByName = "trim")
     @Mapping(target = "email", source = "email", qualifiedByName = "trim")
     @Mapping(target = "residenceSettlement", source = "residenceSettlement", qualifiedByName = "trim")

@@ -37,11 +37,25 @@
                 Проверьте заполнение обязательных полей.
             </div>
 
-            <label class="form-field" for="fullName">
-                <span class="form-field__label">ФИО</span>
-                <input id="fullName" class="form-field__control" type="text" th:field="*{fullName}"
-                       autocomplete="name" placeholder="Иванов Иван Иванович" required>
-                <span class="form-field__error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+            <label class="form-field" for="familyName">
+                <span class="form-field__label">Фамилия</span>
+                <input id="familyName" class="form-field__control" type="text" th:field="*{familyName}"
+                       autocomplete="name" placeholder="Иванов" required>
+                <span class="form-field__error" th:if="${#fields.hasErrors('familyName')}" th:errors="*{familyName}"></span>
+            </label>
+
+            <label class="form-field" for="firstName">
+                <span class="form-field__label">Имя</span>
+                <input id="firstName" class="form-field__control" type="text" th:field="*{firstName}"
+                       autocomplete="name" placeholder="Иван" required>
+                <span class="form-field__error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+            </label>
+
+            <label class="form-field" for="patronymic">
+                <span class="form-field__label">Отчество</span>
+                <input id="patronymic" class="form-field__control" type="text" th:field="*{patronymic}"
+                       autocomplete="name" placeholder="Иванович" required>
+                <span class="form-field__error" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}"></span>
             </label>
 
             <label class="form-field" for="gender">

@@ -16,7 +16,8 @@ public class VolunteerFormValidator {
     private static final String REQUIRED_FIELD_MESSAGE = "Заполните обязательное поле";
 
     public void validateVolunteerForm(VolunteerForm form, BindingResult bindingResult) {
-        rejectIfBlank(bindingResult, FIELD_FULL_NAME, form.getFullName());
+        rejectIfBlank(bindingResult, FIELD_FULL_NAME, form.getFirstName());
+        rejectIfBlank(bindingResult, FIELD_FULL_NAME, form.getFamilyName());
         rejectIfBlank(bindingResult, FIELD_PHONE_NUMBER, form.getPhoneNumber());
         rejectIfBlank(bindingResult, FIELD_RESIDENCE_SETTLEMENT, form.getResidenceSettlement());
         rejectIfMissing(bindingResult, FIELD_GENDER, form.getGender());

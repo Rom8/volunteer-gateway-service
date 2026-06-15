@@ -56,7 +56,8 @@ public class VolunteerController {
             return redirectTo(UPDATE_VOLUNTEER_PATH);
         }
 
-        model.addAttribute(MODEL_VOLUNTEER_NAME, optionalVolunteer.get().getFullName());
+        Volunteer volunteer = optionalVolunteer.get();
+        model.addAttribute(MODEL_VOLUNTEER_NAME, volunteer.getFirstName() + " " + volunteer.getFamilyName());
         return TEMPLATE_VOLUNTEER_HOME;
     }
 

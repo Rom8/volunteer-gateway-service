@@ -24,8 +24,16 @@
 
         <dl class="volunteer-details">
             <div class="volunteer-details__row">
-                <dt>ФИО</dt>
-                <dd th:text="${volunteer.fullName}">Иванов Иван Иванович</dd>
+                <dt>Фамилия</dt>
+                <dd th:text="${volunteer.familyName}">Иванов</dd>
+            </div>
+            <div class="volunteer-details__row">
+                <dt>Имя</dt>
+                <dd th:text="${volunteer.firstName}">Иван</dd>
+            </div>
+            <div class="volunteer-details__row">
+                <dt>Отчество</dt>
+                <dd th:text="${volunteer.patronymic}">Иванович</dd>
             </div>
             <div class="volunteer-details__row">
                 <dt>Пол</dt>

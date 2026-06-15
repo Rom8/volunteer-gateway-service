@@ -1,5 +1,6 @@
 package ru.rom8.rescue.gateway.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.rom8.rescue.gateway.entity.Volunteer;
@@ -9,13 +10,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class VolunteerService {
 
     private final VolunteerRepository volunteerRepository;
-
-    public VolunteerService(VolunteerRepository volunteerRepository) {
-        this.volunteerRepository = volunteerRepository;
-    }
 
     @Transactional
     public Volunteer addVolunteer(Volunteer volunteer) {
@@ -28,15 +26,7 @@ public class VolunteerService {
         Objects.requireNonNull(id, "id must not be null");
         Objects.requireNonNull(updatedVolunteer, "updatedVolunteer must not be null");
 
-        var volunteer = getVolunteer(id);
-        volunteer.setFullName(updatedVolunteer.getFullName());
-        volunteer.setGender(updatedVolunteer.getGender());
-        volunteer.setPhoneNumber(updatedVolunteer.getPhoneNumber());
-        volunteer.setEmail(updatedVolunteer.getEmail());
-        volunteer.setBirthDate(updatedVolunteer.getBirthDate());
-        volunteer.setResidenceSettlement(updatedVolunteer.getResidenceSettlement());
-        volunteer.setResidenceDistrict(updatedVolunteer.getResidenceDistrict());
-        return volunteerRepository.save(volunteer);
+        return volunteerRepository.save(getVolunteer(id).updateFrom(updatedVolunteer));
     }
 
     @Transactional(readOnly = true)

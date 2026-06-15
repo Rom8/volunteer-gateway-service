@@ -10,9 +10,13 @@
             <column name="id" type="BIGINT" autoIncrement="true" remarks="Уникальный идентификатор волонтёра">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_volunteer"/>
             </column>
-            <column name="full_name" type="VARCHAR(255)" remarks="Фамилия, имя и отчество волонтёра">
+            <column name="family_name" type="VARCHAR(100)" remarks="Фамилия волонтёра">
                 <constraints nullable="false"/>
             </column>
+            <column name="first_name" type="VARCHAR(100)" remarks="Имя волонтёра">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patronymic" type="VARCHAR(100)" remarks="Отчество волонтёра"/>
             <column name="gender" type="VARCHAR(32)" remarks="Пол волонтёра">
                 <constraints nullable="false"/>
             </column>

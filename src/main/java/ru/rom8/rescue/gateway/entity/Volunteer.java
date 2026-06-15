@@ -10,6 +10,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Волонтёр, зарегистрированный в системе спасательного проекта.
@@ -19,6 +23,10 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "volunteer")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Volunteer {
 
     /** Уникальный идентификатор волонтёра. */
@@ -26,9 +34,17 @@ public class Volunteer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Фамилия, имя и отчество волонтёра. */
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
+    /** Фамилия волонтёра. */
+    @Column(name = "family_name", nullable = false)
+    private String familyName;
+
+    /** Имя волонтёра. */
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    /** Отчество волонтёра. */
+    @Column(name = "patronymic")
+    private String patronymic;
 
     /** Пол волонтёра. */
     @Enumerated(EnumType.STRING)
@@ -55,171 +71,16 @@ public class Volunteer {
     @Column(name = "residence_district")
     private String residenceDistrict;
 
-    /**
-     * Конструктор для JPA.
-     */
-    protected Volunteer() {
-    }
-
-    /**
-     * Создаёт нового волонтёра.
-     *
-     * @param fullName фамилия, имя и отчество
-     * @param gender пол
-     * @param phoneNumber номер телефона
-     * @param email email для связи и сопоставления с OAuth2-пользователем
-     * @param birthDate дата рождения
-     * @param residenceSettlement населённый пункт проживания
-     * @param residenceDistrict район населённого пункта проживания
-     */
-    public Volunteer(String fullName,
-                     VolunteerGender gender,
-                     String phoneNumber,
-                     String email,
-                     LocalDate birthDate,
-                     String residenceSettlement,
-                     String residenceDistrict) {
-        this.fullName = fullName;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.birthDate = birthDate;
-        this.residenceSettlement = residenceSettlement;
-        this.residenceDistrict = residenceDistrict;
-    }
-
-    /**
-     * Возвращает уникальный идентификатор волонтёра.
-     *
-     * @return идентификатор волонтёра
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Возвращает ФИО волонтёра.
-     *
-     * @return фамилия, имя и отчество
-     */
-    public String getFullName() {
-        return fullName;
-    }
-
-    /**
-     * Устанавливает ФИО волонтёра.
-     *
-     * @param fullName фамилия, имя и отчество
-     */
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    /**
-     * Возвращает пол волонтёра.
-     *
-     * @return пол волонтёра
-     */
-    public VolunteerGender getGender() {
-        return gender;
-    }
-
-    /**
-     * Устанавливает пол волонтёра.
-     *
-     * @param gender пол волонтёра
-     */
-    public void setGender(VolunteerGender gender) {
-        this.gender = gender;
-    }
-
-    /**
-     * Возвращает номер телефона волонтёра.
-     *
-     * @return номер телефона
-     */
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    /**
-     * Устанавливает номер телефона волонтёра.
-     *
-     * @param phoneNumber номер телефона
-     */
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    /**
-     * Возвращает email волонтёра.
-     *
-     * @return email волонтёра
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Устанавливает email волонтёра.
-     *
-     * @param email email волонтёра
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Возвращает дату рождения волонтёра.
-     *
-     * @return дата рождения
-     */
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    /**
-     * Устанавливает дату рождения волонтёра.
-     *
-     * @param birthDate дата рождения
-     */
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    /**
-     * Возвращает населённый пункт проживания волонтёра.
-     *
-     * @return населённый пункт проживания
-     */
-    public String getResidenceSettlement() {
-        return residenceSettlement;
-    }
-
-    /**
-     * Устанавливает населённый пункт проживания волонтёра.
-     *
-     * @param residenceSettlement населённый пункт проживания
-     */
-    public void setResidenceSettlement(String residenceSettlement) {
-        this.residenceSettlement = residenceSettlement;
-    }
-
-    /**
-     * Возвращает район населённого пункта проживания волонтёра.
-     *
-     * @return район населённого пункта проживания или {@code null}, если он не указан
-     */
-    public String getResidenceDistrict() {
-        return residenceDistrict;
-    }
-
-    /**
-     * Устанавливает район населённого пункта проживания волонтёра.
-     *
-     * @param residenceDistrict район населённого пункта проживания
-     */
-    public void setResidenceDistrict(String residenceDistrict) {
-        this.residenceDistrict = residenceDistrict;
+    public Volunteer updateFrom(Volunteer updatedVolunteer) {
+        setFamilyName(updatedVolunteer.getFamilyName());
+        setFirstName(updatedVolunteer.getFirstName());
+        setPatronymic(updatedVolunteer.getPatronymic());
+        setGender(updatedVolunteer.getGender());
+        setPhoneNumber(updatedVolunteer.getPhoneNumber());
+        setEmail(updatedVolunteer.getEmail());
+        setBirthDate(updatedVolunteer.getBirthDate());
+        setResidenceSettlement(updatedVolunteer.getResidenceSettlement());
+        setResidenceDistrict(updatedVolunteer.getResidenceDistrict());
+        return this;
     }
 }
