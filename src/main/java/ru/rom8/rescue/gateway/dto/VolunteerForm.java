@@ -2,12 +2,12 @@ package ru.rom8.rescue.gateway.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.rom8.rescue.gateway.entity.VolunteerGender;
+import ru.rom8.rescue.gateway.api.model.Gender;
+
+import java.time.LocalDate;
 
 @Setter
 @Getter
@@ -19,7 +19,7 @@ public class VolunteerForm {
     private String firstName;
     private String patronymic;
     @NotNull
-    private VolunteerGender gender;
+    private Gender gender;
     @NotBlank(message = "{required.volunteerForm.phoneNumber}")
     private String phoneNumber;
     private String email;

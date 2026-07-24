@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.rom8.rescue.gateway.api.model.Gender;
+import ru.rom8.rescue.gateway.api.model.VolunteerDto;
 import ru.rom8.rescue.gateway.dto.VolunteerForm;
-import ru.rom8.rescue.gateway.entity.Volunteer;
-import ru.rom8.rescue.gateway.entity.VolunteerGender;
 import ru.rom8.rescue.gateway.mapper.VolunteerMapper;
 import ru.rom8.rescue.gateway.service.VolunteerService;
 
@@ -44,20 +44,20 @@ public class VolunteerController {
     @GetMapping(ROOT_PATH)
     public String volunteerHome(@AuthenticationPrincipal OAuth2User oauth2User, Model model) {
         var email = getAuthenticatedEmail(oauth2User);
-        Optional<Volunteer> optionalVolunteer = volunteerService.getVolunteerByEmail(email);
+        Optional<VolunteerDto> optionalVolunteer = volunteerService.getVolunteerByEmail(email);
         if (optionalVolunteer.isEmpty()) {
             return redirectTo(UPDATE_VOLUNTEER_PATH);
         }
 
-        Volunteer volunteer = optionalVolunteer.get();
-        model.addAttribute(MODEL_VOLUNTEER_NAME, volunteer.getFirstName() + " " + volunteer.getFamilyName());
+        VolunteerDto volunteerDto = optionalVolunteer.get();
+        model.addAttribute(MODEL_VOLUNTEER_NAME, volunteerDto.getFirstName() + " " + volunteerDto.getFamilyName());
         return TEMPLATE_VOLUNTEER_HOME;
     }
 
     @GetMapping(UPDATE_VOLUNTEER_PATH)
     public String volunteerForm(@AuthenticationPrincipal OAuth2User oauth2User, Model model) {
         var email = getAuthenticatedEmail(oauth2User);
-        Optional<Volunteer> volunteerOpt = volunteerService.getVolunteerByEmail(email);
+        Optional<VolunteerDto> volunteerOpt = volunteerService.getVolunteerByEmail(email);
         if (volunteerOpt.isEmpty()) {
             return showVolunteerForm(model, VolunteerForm.withEmail(email), false);
         }
@@ -76,11 +76,11 @@ public class VolunteerController {
             return showVolunteerForm(model, form, true);
         }
 
-        Optional<Volunteer> volunteerOpt = volunteerService.getVolunteerByEmail(email);
+        Optional<VolunteerDto> volunteerOpt = volunteerService.getVolunteerByEmail(email);
         if (volunteerOpt.isEmpty()) {
-            volunteerService.addVolunteer(volunteerMapper.toVolunteer(form));
+            volunteerService.createVolunteer(volunteerMapper.toVolunteerRegisterRequest(form));
         } else {
-            volunteerService.updateVolunteer(volunteerOpt.get().getId(), volunteerMapper.toVolunteer(form));
+            volunteerService.updateVolunteer(volunteerMapper.toVolunteerUpdateRequest(form));
         }
         return redirectTo(VOLUNTEER_PROFILE_PATH);
     }
@@ -88,18 +88,18 @@ public class VolunteerController {
     @GetMapping(VOLUNTEER_PROFILE_PATH)
     public String volunteerDetails(@AuthenticationPrincipal OAuth2User oauth2User, Model model) {
         var email = getAuthenticatedEmail(oauth2User);
-        var volunteer = volunteerService.getVolunteerByEmail(email);
-        if (volunteer.isEmpty()) {
+        Optional<VolunteerDto> volunteerOpt = volunteerService.getVolunteerByEmail(email);
+        if (volunteerOpt.isEmpty()) {
             return redirectTo(UPDATE_VOLUNTEER_PATH);
         }
 
-        model.addAttribute(MODEL_VOLUNTEER, volunteer.get());
+        model.addAttribute(MODEL_VOLUNTEER, volunteerMapper.toVolunteerForm(volunteerOpt.get()));
         return TEMPLATE_VOLUNTEER_DETAILS;
     }
 
     private String showVolunteerForm(Model model, VolunteerForm form, boolean updateMode) {
         model.addAttribute(MODEL_VOLUNTEER_FORM, form);
-        model.addAttribute(MODEL_GENDERS, VolunteerGender.values());
+        model.addAttribute(MODEL_GENDERS, Gender.values());
         model.addAttribute(MODEL_VOLUNTEER_UPDATE_MODE, updateMode);
         return TEMPLATE_VOLUNTEER_FORM;
     }

@@ -1,17 +1,6 @@
 spring:
   application:
     name: volunteer-gateway-service
-  datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    open-in-view: false
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.xml
   security:
     oauth2:
       client:
@@ -29,3 +18,6 @@ spring:
             token-uri: https://oauth.yandex.ru/token
             user-info-uri: https://login.yandex.ru/info
             user-name-attribute: default_email
+clients:
+  volunteer-service:
+    base-url: http://localhost:8101   #todo использовать  Service Discovery - eureka

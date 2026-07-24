@@ -2,50 +2,48 @@ package ru.rom8.rescue.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.rom8.rescue.gateway.entity.Volunteer;
-import ru.rom8.rescue.gateway.repository.VolunteerRepository;
+import ru.rom8.rescue.gateway.api.model.VolunteerDto;
+import ru.rom8.rescue.gateway.api.model.VolunteerRegisterRequest;
+import ru.rom8.rescue.gateway.api.model.VolunteerUpdateRequest;
+import ru.rom8.rescue.gateway.client.VolunteerClient;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class VolunteerService {
 
-    private final VolunteerRepository volunteerRepository;
+    private final VolunteerClient volunteerClient;
+    private final EmailsCacheService emailsCacheService;
 
-    @Transactional
-    public Volunteer addVolunteer(Volunteer volunteer) {
-        Objects.requireNonNull(volunteer, "volunteer must not be null");
-        return volunteerRepository.save(volunteer);
+    public VolunteerDto createVolunteer(VolunteerRegisterRequest volunteerRegisterRequest) {
+        Objects.requireNonNull(volunteerRegisterRequest, "volunteerRegisterRequest must not be null");
+        UUID uuid = emailsCacheService.getUUIDOrCreateByEmail(volunteerRegisterRequest.getEmail());
+        return volunteerClient.registerMe(uuid.toString(), volunteerRegisterRequest);
     }
 
-    @Transactional
-    public Volunteer updateVolunteer(Long id, Volunteer updatedVolunteer) {
-        Objects.requireNonNull(id, "id must not be null");
-        Objects.requireNonNull(updatedVolunteer, "updatedVolunteer must not be null");
+    public VolunteerDto updateVolunteer(VolunteerUpdateRequest volunteerUpdateRequest) {
+        Objects.requireNonNull(volunteerUpdateRequest, "volunteerUpdateRequest must not be null");
 
-        return volunteerRepository.save(getVolunteer(id).updateFrom(updatedVolunteer));
+        UUID uuid = emailsCacheService.getUUIDOrCreateByEmail(volunteerUpdateRequest.getEmail());
+        return volunteerClient.updateMe(uuid.toString(), volunteerUpdateRequest);
     }
 
-    @Transactional(readOnly = true)
-    public Volunteer getVolunteer(Long id) {
-        Objects.requireNonNull(id, "id must not be null");
-        return volunteerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Volunteer not found by id: " + id));
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Volunteer> getVolunteerByEmail(String email) {
+    public Optional<VolunteerDto> getVolunteerByEmail(String email) {
         if (email == null || email.isBlank()) {
             return Optional.empty();
         }
-        return volunteerRepository.findByEmailIgnoreCase(email.trim());
+        if (emailsCacheService.hasRegistered(email)) {
+            UUID uuid = emailsCacheService.getUUIDOrCreateByEmail(email);
+            VolunteerDto volunteerDto = volunteerClient.getMe(uuid.toString());
+            return Optional.ofNullable(volunteerDto);
+        }
+        return Optional.empty();
     }
 
-    @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
-        return email != null && !email.isBlank() && volunteerRepository.existsByEmailIgnoreCase(email.trim());
+        return emailsCacheService.hasRegistered(email);
     }
 }
